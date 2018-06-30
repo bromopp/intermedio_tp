@@ -2,6 +2,7 @@ package ar.edu.utn.java.intermedio.service;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Random;
 
 import org.springframework.stereotype.Service;
 
@@ -67,8 +68,9 @@ public class BenchmarkService {
 	
 	private List<Integer> generarItems(Integer cantidadItems){
 		List<Integer> items = new ArrayList<>();
+		Random rand= new Random();
 		for(int i = 0; i < cantidadItems; i++) {
-			items.add(i);
+			items.add(rand.nextInt(cantidadItems)+1);
 		}
 		return items;
 	}
