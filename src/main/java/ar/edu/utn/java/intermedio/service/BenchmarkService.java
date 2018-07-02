@@ -4,8 +4,10 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
 
+
 import org.springframework.stereotype.Service;
 
+import Excepciones.CantMaximaException;
 import ar.edu.utn.java.intermedio.domain.BenchmarkResponse;
 import ar.edu.utn.java.intermedio.operacion.Benchmark;
 import ar.edu.utn.java.intermedio.operacion.OperacionFor;
@@ -20,7 +22,7 @@ public class BenchmarkService {
 	public BenchmarkResponse imprimir(Integer cantidadItems) {
 		
 		if(cantidadItems > CANTIDAD_MAXIMA_ITEMS) {
-			throw new RuntimeException(String.format("Error: la cantidad maximo de items %d no debe superar el valor %d", 
+			throw new CantMaximaException(String.format("Error: la cantidad maxima de items %d no debe superar el valor %d", 
 					cantidadItems, CANTIDAD_MAXIMA_ITEMS));
 		}
 		
@@ -33,21 +35,21 @@ public class BenchmarkService {
 		Benchmark operacion = new OperacionStreams();
 		operacion.imprimirListado(response.getItems());
 		
-		response.setTiempoStreams((System.currentTimeMillis() - tiempo) );
+		response.setTiempoStreams((System.currentTimeMillis() - tiempo)% 1000 );
 		
 		//TiempoImprimirFor
 		tiempo = System.currentTimeMillis();
 		
 		Benchmark operacionFor = new OperacionFor();
 		operacionFor.imprimirListado(response.getItems());
-		response.setTiempoFor(System.currentTimeMillis()- tiempo);
+		response.setTiempoFor((System.currentTimeMillis()- tiempo)% 1000);
 		
 		//TiempoImprimirWhile
 		tiempo = System.currentTimeMillis();
 		
 		Benchmark operacionWhile = new OperacionWhile();
 		operacionWhile.imprimirListado(response.getItems());
-		response.setTiempoWhile(System.currentTimeMillis()- tiempo);
+		response.setTiempoWhile((System.currentTimeMillis()- tiempo)% 1000);
 		
 		
 		return response;
@@ -55,6 +57,10 @@ public class BenchmarkService {
 
 	public BenchmarkResponse sumar(Integer cantidadItems) {
 		
+		if(cantidadItems > CANTIDAD_MAXIMA_ITEMS) {
+			throw new CantMaximaException(String.format("Error: la cantidad maxima de items %d no debe superar el valor %d", 
+					cantidadItems, CANTIDAD_MAXIMA_ITEMS));
+		}
 		BenchmarkResponse response = inicializarResponse(cantidadItems);
 		long tiempo = System.currentTimeMillis();
 		
@@ -63,27 +69,31 @@ public class BenchmarkService {
 			
 			Benchmark operacion = new OperacionStreams();
 			response.setResultado(operacion.sumarValores(response.getItems()));
-			response.setTiempoStreams((System.currentTimeMillis() - tiempo) );
+			response.setTiempoStreams((System.currentTimeMillis() - tiempo)% 1000 );
 		
 		//TiempoSumarFor
 		tiempo = System.currentTimeMillis();
 				
 			Benchmark operacionFor = new OperacionFor();
 			response.setResultado(operacionFor.sumarValores(response.getItems()));
-			response.setTiempoFor(System.currentTimeMillis()- tiempo);
+			response.setTiempoFor((System.currentTimeMillis()- tiempo)% 1000);
 				
 		//TiempoSumarWhile
 		tiempo = System.currentTimeMillis();
 			
 			Benchmark operacionWhile = new OperacionWhile();
 			response.setResultado(operacionWhile.sumarValores(response.getItems()));
-			response.setTiempoWhile(System.currentTimeMillis()- tiempo);
+			response.setTiempoWhile ((System.currentTimeMillis()- tiempo)% 1000);
 			
 		return response;
 	}
 	
 	public BenchmarkResponse maximo(Integer cantidadItems) {
 		
+		if(cantidadItems > CANTIDAD_MAXIMA_ITEMS) {
+			throw new CantMaximaException(String.format("Error: la cantidad maxima de items %d no debe superar el valor %d", 
+					cantidadItems, CANTIDAD_MAXIMA_ITEMS));
+		}
 		BenchmarkResponse response = inicializarResponse(cantidadItems);
 		long tiempo = System.currentTimeMillis();
 	
@@ -92,21 +102,21 @@ public class BenchmarkService {
 		
 			Benchmark operacion = new OperacionStreams();
 			response.setResultado(operacion.maximoValor(response.getItems()));
-			response.setTiempoStreams((System.currentTimeMillis() - tiempo) );
+			response.setTiempoStreams((System.currentTimeMillis() - tiempo)% 1000 );
 		
 		//TiempoMaxFor
 		tiempo = System.currentTimeMillis();
 		
 			Benchmark operacionFor = new OperacionFor();
 			response.setResultado(operacionFor.maximoValor(response.getItems()));
-			response.setTiempoFor((System.currentTimeMillis() - tiempo));
+			response.setTiempoFor((System.currentTimeMillis() - tiempo)% 1000);
 		
 		//TiempoMaxWhile
 		tiempo = System.currentTimeMillis();
 			
 			Benchmark operacionWhile = new OperacionWhile();
 			response.setResultado(operacionWhile.maximoValor(response.getItems()));
-			response.setTiempoWhile((System.currentTimeMillis() - tiempo));
+			response.setTiempoWhile((System.currentTimeMillis() - tiempo)% 1000);
 			
 		return response;
 	}
