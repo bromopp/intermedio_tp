@@ -8,7 +8,9 @@ import org.springframework.stereotype.Service;
 
 import ar.edu.utn.java.intermedio.domain.BenchmarkResponse;
 import ar.edu.utn.java.intermedio.operacion.Benchmark;
+import ar.edu.utn.java.intermedio.operacion.OperacionFor;
 import ar.edu.utn.java.intermedio.operacion.OperacionStreams;
+import ar.edu.utn.java.intermedio.operacion.OperacionWhile;
 
 @Service
 public class BenchmarkService {
@@ -22,47 +24,90 @@ public class BenchmarkService {
 					cantidadItems, CANTIDAD_MAXIMA_ITEMS));
 		}
 		
-		BenchmarkResponse response = inicializarResponse(cantidadItems);
+		BenchmarkResponse response = inicializarResponse(cantidadItems);		
 		long tiempo = System.currentTimeMillis();
+		
+		//TiempoImprimirStream
+		tiempo = System.currentTimeMillis();
 		
 		Benchmark operacion = new OperacionStreams();
 		operacion.imprimirListado(response.getItems());
 		
 		response.setTiempoStreams((System.currentTimeMillis() - tiempo) );
 		
+		//TiempoImprimirFor
 		tiempo = System.currentTimeMillis();
-
+		
+		Benchmark operacionFor = new OperacionFor();
+		operacionFor.imprimirListado(response.getItems());
+		response.setTiempoFor(System.currentTimeMillis()- tiempo);
+		
+		//TiempoImprimirWhile
+		tiempo = System.currentTimeMillis();
+		
+		Benchmark operacionWhile = new OperacionWhile();
+		operacionWhile.imprimirListado(response.getItems());
+		response.setTiempoWhile(System.currentTimeMillis()- tiempo);
+		
+		
 		return response;
 	}
 
-
-	
 	public BenchmarkResponse sumar(Integer cantidadItems) {
 		
 		BenchmarkResponse response = inicializarResponse(cantidadItems);
 		long tiempo = System.currentTimeMillis();
 		
-		Benchmark operacion = new OperacionStreams();
-		response.setResultado(operacion.sumarValores(response.getItems()));
-		response.setTiempoStreams((System.currentTimeMillis() - tiempo) );
+		//TiempoSumarStream
+			tiempo = System.currentTimeMillis();
+			
+			Benchmark operacion = new OperacionStreams();
+			response.setResultado(operacion.sumarValores(response.getItems()));
+			response.setTiempoStreams((System.currentTimeMillis() - tiempo) );
 		
+		//TiempoSumarFor
 		tiempo = System.currentTimeMillis();
-		
+				
+			Benchmark operacionFor = new OperacionFor();
+			response.setResultado(operacionFor.sumarValores(response.getItems()));
+			response.setTiempoFor(System.currentTimeMillis()- tiempo);
+				
+		//TiempoSumarWhile
+		tiempo = System.currentTimeMillis();
+			
+			Benchmark operacionWhile = new OperacionWhile();
+			response.setResultado(operacionWhile.sumarValores(response.getItems()));
+			response.setTiempoWhile(System.currentTimeMillis()- tiempo);
+			
 		return response;
-		
 	}
 	
 	public BenchmarkResponse maximo(Integer cantidadItems) {
 		
 		BenchmarkResponse response = inicializarResponse(cantidadItems);
 		long tiempo = System.currentTimeMillis();
-		
-		Benchmark operacion = new OperacionStreams();
-		response.setResultado(operacion.maximoValor(response.getItems()));
-		response.setTiempoStreams((System.currentTimeMillis() - tiempo) );
-		
+	
+		//TiempoMaxStream
 		tiempo = System.currentTimeMillis();
 		
+			Benchmark operacion = new OperacionStreams();
+			response.setResultado(operacion.maximoValor(response.getItems()));
+			response.setTiempoStreams((System.currentTimeMillis() - tiempo) );
+		
+		//TiempoMaxFor
+		tiempo = System.currentTimeMillis();
+		
+			Benchmark operacionFor = new OperacionFor();
+			response.setResultado(operacionFor.maximoValor(response.getItems()));
+			response.setTiempoFor((System.currentTimeMillis() - tiempo));
+		
+		//TiempoMaxWhile
+		tiempo = System.currentTimeMillis();
+			
+			Benchmark operacionWhile = new OperacionWhile();
+			response.setResultado(operacionWhile.maximoValor(response.getItems()));
+			response.setTiempoWhile((System.currentTimeMillis() - tiempo));
+			
 		return response;
 	}
 	
