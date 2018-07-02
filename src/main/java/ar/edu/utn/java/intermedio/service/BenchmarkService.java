@@ -18,6 +18,7 @@ import ar.edu.utn.java.intermedio.operacion.OperacionWhile;
 public class BenchmarkService {
 	
 	private static final Integer CANTIDAD_MAXIMA_ITEMS = 50000000;
+	private static final Integer LIMITE_ITEMS_RESPUESTA = 101;
 	
 	public BenchmarkResponse imprimir(Integer cantidadItems) {
 		
@@ -50,10 +51,15 @@ public class BenchmarkService {
 		Benchmark operacionWhile = new OperacionWhile();
 		operacionWhile.imprimirListado(response.getItems());
 		response.setTiempoWhile((System.currentTimeMillis()- tiempo)% 1000);
-		
+			
+		if (cantidadItems > LIMITE_ITEMS_RESPUESTA) { 
+				limitResponse(response, cantidadItems); 
+			}
 		
 		return response;
 	}
+
+
 
 	public BenchmarkResponse sumar(Integer cantidadItems) {
 		
@@ -85,6 +91,9 @@ public class BenchmarkService {
 			response.setResultado(operacionWhile.sumarValores(response.getItems()));
 			response.setTiempoWhile ((System.currentTimeMillis()- tiempo)% 1000);
 			
+			if (cantidadItems > LIMITE_ITEMS_RESPUESTA) { 
+				limitResponse(response, cantidadItems); 
+			}
 		return response;
 	}
 	
@@ -118,6 +127,9 @@ public class BenchmarkService {
 			response.setResultado(operacionWhile.maximoValor(response.getItems()));
 			response.setTiempoWhile((System.currentTimeMillis() - tiempo)% 1000);
 			
+			if (cantidadItems > LIMITE_ITEMS_RESPUESTA) { 
+				limitResponse(response, cantidadItems); 
+			}
 		return response;
 	}
 	
@@ -137,4 +149,15 @@ public class BenchmarkService {
 		return response;
 	}
 	
+	private void limitResponse(BenchmarkResponse response,Integer cantidadItems) {
+        List<Integer> newItems = new ArrayList<Integer>(100);
+        int start_of_last_50 = cantidadItems - 50;
+        int old_lenght = response.getItems().size();
+        for (int i = 0; i < old_lenght; i++) {
+              if (i < 50 || i >= start_of_last_50) {
+                    newItems.add(response.getItems().get(i));
+               }
+        }
+        response.setItems(newItems);
+	}
 }
